@@ -18,9 +18,7 @@ up your Python script to best utilise the :class:`Workflow` object.
 from __future__ import print_function, unicode_literals
 
 import binascii
-from contextlib import contextmanager
 import cPickle
-from copy import deepcopy
 import errno
 import json
 import logging
@@ -36,6 +34,8 @@ import subprocess
 import sys
 import time
 import unicodedata
+from contextlib import contextmanager
+from copy import deepcopy
 
 try:
     import xml.etree.cElementTree as ET
@@ -1132,7 +1132,7 @@ class Workflow(object):
     @property
     def alfred_version(self):
         """Alfred version as :class:`~workflow.update.Version` object."""
-        from update import Version
+        from workflow.update import Version
         return Version(self.alfred_env.get('version'))
 
     @property
@@ -1294,7 +1294,7 @@ class Workflow(object):
                 version = self.info.get('version')
 
             if version:
-                from update import Version
+                from workflow.update import Version
                 version = Version(version)
 
             self._version = version
@@ -2313,7 +2313,7 @@ class Workflow(object):
 
             version = self.settings.get('__workflow_last_version')
             if version:
-                from update import Version
+                from workflow.update import Version
                 version = Version(version)
 
             self._last_version_run = version
@@ -2343,7 +2343,7 @@ class Workflow(object):
             version = self.version
 
         if isinstance(version, basestring):
-            from update import Version
+            from workflow.update import Version
             version = Version(version)
 
         self.settings['__workflow_last_version'] = str(version)
@@ -2418,7 +2418,7 @@ class Workflow(object):
             # version = self._update_settings['version']
             version = str(self.version)
 
-            from background import run_in_background
+            from workflow.background import run_in_background
 
             # update.py is adjacent to this file
             update_script = os.path.join(os.path.dirname(__file__),
@@ -2449,7 +2449,7 @@ class Workflow(object):
             installed, else ``False``
 
         """
-        import update
+        from workflow import update
 
         github_slug = self._update_settings['github_slug']
         # version = self._update_settings['version']
@@ -2458,7 +2458,7 @@ class Workflow(object):
         if not update.check_update(github_slug, version, self.prereleases):
             return False
 
-        from background import run_in_background
+        from workflow.background import run_in_background
 
         # update.py is adjacent to this file
         update_script = os.path.join(os.path.dirname(__file__),

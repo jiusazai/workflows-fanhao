@@ -30,7 +30,7 @@ import json
 import os
 import sys
 
-from .workflow import Workflow
+from workflow import Workflow
 
 
 class Modifier(object):
